@@ -1,27 +1,42 @@
 const express = require('express');
-const cors = require('cors');
 const fs = require('fs');
-
+const cors = require('cors');
 const app = express();
-const port = 4000;
+const PORT = 4000;
 
 app.use(cors());
 app.use(express.json());
 
 app.post('/submit-form-data', (req, res) => {
-  const formData = req.body;
-  const json = JSON.stringify(formData, null, 2);
-  fs.writeFile('roomdata.json', json, (err) => {
+  const { date, roomNumber, isOccupied } = req.body;
+  const formData = { date, roomNumber, isOccupied };
+
+  fs.readFile('roomdata.json', 'utf8', (err, data) => {
     if (err) {
       console.error(err);
-      res.status(500).send('Error writing file');
-    } else {
-      console.log('Data written to file');
-      res.send('Data written to file');
+      res.status(500).send('Failed to read file');
+      return;
     }
+
+    let roomData = [];
+    if (data) {
+      roomData = JSON.parse(data);
+    }
+
+    roomData.push(formData);
+
+    fs.writeFile('roomdata.json', JSON.stringify(roomData, null, 2), (err) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Failed to write file');
+        return;
+      }
+
+      res.status(200).send('Form data submitted successfully!');
+    });
   });
 });
 
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });

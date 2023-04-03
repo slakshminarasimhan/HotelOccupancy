@@ -1,4 +1,22 @@
-{
-  "roomNumber": "2",
-  "isOccupied": "y"
-}
+[
+  {
+    "date": "2023-04-03",
+    "roomNumber": "1",
+    "isOccupied": "y"
+  },
+  {
+    "date": "2023-04-03",
+    "roomNumber": "2",
+    "isOccupied": "y"
+  },
+  {
+    "date": "2023-04-03",
+    "roomNumber": "3",
+    "isOccupied": "n"
+  },
+  {
+    "date": "2023-04-03",
+    "roomNumber": "4",
+    "isOccupied": "n"
+  }
+]

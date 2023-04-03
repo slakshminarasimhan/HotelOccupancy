@@ -1,0 +1,17 @@
+.hotel-form {
+    background-color: #f2f2f2;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .hotel-form label {
+    font-weight: bold;
+  }
+  
+  .hotel-form input {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 10px;
+  }
+  
