@@ -1,42 +1,63 @@
 const express = require('express');
-const fs = require('fs');
 const cors = require('cors');
+const fs = require('fs');
+
 const app = express();
+app.use(express.json());
+app.use(cors());
+
 const PORT = 4000;
 
-app.use(cors());
-app.use(express.json());
-
-app.post('/submit-form-data', (req, res) => {
-  const { date, roomNumber, isOccupied } = req.body;
-  const formData = { date, roomNumber, isOccupied };
-
-  fs.readFile('roomdata.json', 'utf8', (err, data) => {
+app.post('/roomdata', (req, res) => {
+  const { date, roomNumber, occupied } = req.body;
+  const data = { date, roomNumber, occupied };
+  fs.readFile('./roomdata.json', (err, jsonString) => {
     if (err) {
-      console.error(err);
-      res.status(500).send('Failed to read file');
-      return;
+      console.log('Error reading file:', err);
+      return res.status(500).send('Error reading file');
     }
 
-    let roomData = [];
-    if (data) {
-      roomData = JSON.parse(data);
-    }
+    let jsonData = jsonString.length > 0 ? JSON.parse(jsonString) : [];
 
-    roomData.push(formData);
+    jsonData.push(data);
 
-    fs.writeFile('roomdata.json', JSON.stringify(roomData, null, 2), (err) => {
+    fs.writeFile('./roomdata.json', JSON.stringify(jsonData), (err) => {
       if (err) {
-        console.error(err);
-        res.status(500).send('Failed to write file');
-        return;
+        console.log('Error writing file:', err);
+        return res.status(500).send('Error writing file');
       }
 
-      res.status(200).send('Form data submitted successfully!');
+      console.log('Data written to file');
+      return res.status(200).send('Data written to file');
+    });
+  });
+});
+
+app.post('/devicedata', (req, res) => {
+  const { date, deviceId, temperature, electricity } = req.body;
+  const data = { date, deviceId, temperature, electricity };
+  fs.readFile('./devicedata.json', (err, jsonString) => {
+    if (err) {
+      console.log('Error reading file:', err);
+      return res.status(500).send('Error reading file');
+    }
+
+    let jsonData = jsonString.length > 0 ? JSON.parse(jsonString) : [];
+
+    jsonData.push(data);
+
+    fs.writeFile('./devicedata.json', JSON.stringify(jsonData), (err) => {
+      if (err) {
+        console.log('Error writing file:', err);
+        return res.status(500).send('Error writing file');
+      }
+
+      console.log('Data written to file');
+      return res.status(200).send('Data written to file');
     });
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

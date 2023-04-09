@@ -1,10 +1,10 @@
 import React from 'react';
-import HotelOccupancyForm from './HotelOccupancyForm';
+import HotelOperationsDashboard from './HotelOperationsDashboard';
 
 function App() {
   return (
     <div className="App">
-      <HotelOccupancyForm />
+      <HotelOperationsDashboard />
     </div>
   );
 }
